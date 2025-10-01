@@ -7,9 +7,6 @@ import os  # For debug
 # Load .env early
 load_dotenv()
 
-# Debug: Check API key (remove this line after testing)
-st.sidebar.write(f"API Key Loaded: {'Yes' if os.getenv('OPENAI_API_KEY') else 'No'}")
-
 # Streamlit page config
 st.set_page_config(page_title="🌿 Plant Care Assistant", page_icon="🌿", layout="centered")
 
@@ -49,11 +46,6 @@ if uploaded_file is not None:
     # Add assistant message
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-# Display chat history (text-only for now)
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
 # Chat input (text-only)
 if prompt := st.chat_input("What's up with your plant?"):
     # Add user message
@@ -69,6 +61,11 @@ if prompt := st.chat_input("What's up with your plant?"):
     
     # Add assistant message
     st.session_state.messages.append({"role": "assistant", "content": response})
+
+# Display chat history (moved after input to avoid duplication on rerun)
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 # Sidebar for tips
 with st.sidebar:
