@@ -1,1 +1,9 @@
 python-dotenv
+streamlit
+langchain
+langchain-community
+langchain-openai
+openai
+python-dotenv
+pillow
+scikit-learn
