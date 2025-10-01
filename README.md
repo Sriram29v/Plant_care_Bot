@@ -36,7 +36,9 @@ To get the project running, create a dedicated environment and install the requi
 # Create and activate a virtual environment
 python -m venv plant_bot_env
 source plant_bot_env/bin/activate  # Mac/Linux
-.\plant_bot_env\Scripts\activate   # Windows
+
+# Windows
+.\plant_bot_env\Scripts\activate   
 
 # Install required packages (from requirements.txt)
 pip install -r requirements.txt
