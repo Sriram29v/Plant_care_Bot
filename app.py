@@ -28,9 +28,9 @@ st.markdown("Ask me about your plants—care tips, troubleshooting, and more!")
 # Image upload section
 uploaded_file = st.file_uploader("📸 Upload a photo of your plant for diagnosis", type=["jpg", "jpeg", "png"])
 if uploaded_file is not None:
-    # Display the image (fixed deprecation)
+    # Display the image (fixed: omit width to avoid deprecation error)
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Plant Photo", width=None)
+    st.image(image, caption="Uploaded Plant Photo")
     
     # Generate prompt for vision analysis
     prompt = f"Analyze this plant photo for issues like diseases, pests, or care problems. Suggest fixes based on common houseplants. Keep it helpful and concise."
