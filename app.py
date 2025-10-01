@@ -25,31 +25,31 @@ st.markdown("Ask me about your plants—care tips, troubleshooting, and more!")
 # Image upload section
 uploaded_file = st.file_uploader("📸 Upload a photo of your plant for diagnosis", type=["jpg", "jpeg", "png"])
 if uploaded_file is not None:
-    # Display the image (fixed: omit width to avoid deprecation error)
+    # Display the image
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Plant Photo")
     
     # Generate prompt for vision analysis
     prompt = f"Analyze this plant photo for issues like diseases, pests, or care problems. Suggest fixes based on common houseplants. Keep it helpful and concise."
     
-    # Add user message (with image note)
-    st.session_state.messages.append({"role": "user", "content": f"{prompt} (Photo uploaded)"})
+    # Render user message (don't add to session yet)
     with st.chat_message("user"):
         st.markdown(f"{prompt} (Photo uploaded)")
     
-    # Get bot response (pass image file)
+    # Get bot response
     with st.chat_message("assistant"):
         with st.spinner("Analyzing image..."):
             response = st.session_state.bot.get_response(prompt, image=uploaded_file)
         st.markdown(response)
     
-    # Add assistant message
+    # Add to session *after* rendering (prevents duplication)
+    st.session_state.messages.append({"role": "user", "content": f"{prompt} (Photo uploaded)"})
     st.session_state.messages.append({"role": "assistant", "content": response})
+    st.rerun()  # Rerun to update history display
 
 # Chat input (text-only)
 if prompt := st.chat_input("What's up with your plant?"):
-    # Add user message
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    # Render user message
     with st.chat_message("user"):
         st.markdown(prompt)
     
@@ -59,10 +59,12 @@ if prompt := st.chat_input("What's up with your plant?"):
             response = st.session_state.bot.get_response(prompt)
         st.markdown(response)
     
-    # Add assistant message
+    # Add to session *after* rendering
+    st.session_state.messages.append({"role": "user", "content": prompt})
     st.session_state.messages.append({"role": "assistant", "content": response})
+    st.rerun()  # Rerun to update history display
 
-# Display chat history (moved after input to avoid duplication on rerun)
+# Display full chat history (at the end, only once)
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
